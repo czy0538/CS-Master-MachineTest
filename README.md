@@ -204,3 +204,9 @@ const double Pi=acos(-1.0);
 #define LessEqu(a,b) (((a)-(b))<(eps))
 ```
 
+### 3.闰年判断
+
+```c
+(i%4==0&&i%100!=0)||i%400==0
+```
+
