@@ -1,8 +1,8 @@
-# cs机试笔记
 
-## 基本c++/c知识总结
 
-### 1. 数据类型
+# 基本c++/c知识总结
+
+## 1. 数据类型
 
 - 10^9^ (32bits,2147483648)以内的数据用int,10^18^(64位)以内用long long，注意如果直接赋值long long数且大小超过了int范围，需要在立即数后面加ll。
 
@@ -34,20 +34,20 @@
 
 - 数组名本身就是一个指针，指向第一个元素
 
-### 2. 运算符
+## 2. 运算符
 
 - A ? B : C ，如果A为真，返回B的内容，否则返回C的内容
 - int中无穷大数为 (1<<31)-1,即 0x3fffffff
 
 
 
-### 3. 输入输出
+## 3. 输入输出
 
 [C/C++中的结束输入条件判断](https://blog.csdn.net/Jaster_wisdom/article/details/81161896)
 
 除了string类型以外，尽量使用printf和scanf，因为速度会更快，他们在头文件#include<cstdio>中
 
-#### 3.1 scanf
+### 3.1 scanf
 
 ![image-20210218163024672](https://i.loli.net/2021/02/18/TsAPtrpx5izfjDe.png)
 
@@ -65,7 +65,7 @@ scanf("%d:%d:%d",&hh,&mm&ss);
 
 - 大部分格式符输入是以空白符（空格，tab）结束的，%c会读入空格，%s是以空格和换行为标志的;
 
-#### 3.2 printf
+### 3.2 printf
 
 ![image-20210218163015658](https://i.loli.net/2021/02/18/dcjbe5RhDkOg24t.png)
 
@@ -76,13 +76,13 @@ scanf("%d:%d:%d",&hh,&mm&ss);
 - %0md不足m位的int变量以m位进行右对齐输出，高位补0
 - %.mf小数保留m位输出（题目要求精确到小数点后xx位或保留xx位使用，是四舍六如五成双原则，四舍五入使用round函数）
 
-#### 3.3 单个字符
+### 3.3 单个字符
 
 getchar()和putchar()用来输入/输出单个字符，会捕捉到换行符，而不是像其他忽略他。
 
 
 
-### 4.math函数
+## 4.math函数
 
 #include<cmath>
 
@@ -111,11 +111,11 @@ getchar()和putchar()用来输入/输出单个字符，会捕捉到换行符，�
 
 8. 四舍五入round(x)
 
-### 5. 数组
+## 5. 数组
 
 note：如果申请的数组较大，应当定义到函数外面的全局变量区
 
-#### 5.1 一维数组
+### 5.1 一维数组
 
 ```c++
 数据类型 数组名[元素个数]={初始化列表}
@@ -123,19 +123,19 @@ note：如果申请的数组较大，应当定义到函数外面的全局变量�
 
 如果想给整个数组赋初值0，可以等于一个空的大括号
 
-#### 5.2 二维数组
+### 5.2 二维数组
 
 二维数组赋初值需要每一行都用大括号，即二维数组理解成数组的数组，赋初值的时候需要对每个数组赋初值。
 
-### 6. 函数
+## 6. 函数
 
-#### 6.1 以数组作为函数参数
+### 6.1 以数组作为函数参数
 
 数组不允许作为返回元素出现，但可以作为参数，多维数组第一维可以不写大小，第二维必须写。
 
-### 7 多点测试输入输出格式
+## 7 多点测试输入输出格式
 
-#### 7.1 输入
+### 7.1 输入
 
 - 没有给定输入结束方式，默认为EOF结尾
 
@@ -166,15 +166,88 @@ note：如果申请的数组较大，应当定义到函数外面的全局变量�
 
   如果在一个程序中先使用cin>>str输入，然后再使用getline函数的话，需要再cin>>str之后使用cin.get()处理回车才行，也就是把回车当做cin.get()的输入，毕竟用户确实输入了一个回车。
 
-#### 7.2 输出
+### 7.2 输出
 
 - 前面要空行，最后一次不要空行
 
   这种一般与组数相关联，因此可以采用最后加入if来判断要不要有空行。
 
-## 小代码段
 
-### 1.求反序数
+
+## 8 stl内置算法使用
+
+存在于头文件**algorithm**中
+
+### 8.1 sort函数
+
+- 时间复杂度为O(n*logn)，为不稳定排序
+
+```c++
+//原型1
+template <class RandomAccessIterator>
+  void sort (RandomAccessIterator first, RandomAccessIterator last);
+//原型2
+template <class RandomAccessIterator, class Compare>
+  void sort (RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+```
+
+- 参数说明
+
+  - first，last为可以随机访问元素的迭代器或指针类型（数组名，begin(),end()）
+  - 排序范围为[begin,end)
+  - 默认为升序排序
+
+- cmp函数
+
+  - 通用形式(常用)
+
+    ```c++
+    bool Cmp(const T &a,const T &b)
+    {
+        //当需要a在b前面的时候反回true
+    }
+    ```
+
+  - 类、结构体中重载运算符<形式，该情况下使用默认排序即可(涉及类的比较可以采用)
+
+    ```cpp
+    class Stu
+    {
+    public:
+        int id;
+        string name;
+        Stu(int iid, string iname) : id(iid), name(iname) {}
+        bool operator <(const Stu &i)
+        {
+            return id < i.id;
+        }
+    };
+    int main()
+    {
+        vector<Stu> stus;
+        stus.push_back(Stu(10, "10"));
+        stus.push_back(Stu(1, "1"));
+        sort(stus.begin(), stus.end());
+        return 0;
+    }
+    ```
+
+  - 使用对象作为cmp(基本不用)
+
+    ```c++
+    struct myclass {
+      bool operator() (int i,int j) { return (i<j);}
+    } myobject;
+    sort (myvector.begin(), myvector.end(), myobject);
+    ```
+
+    
+
+
+
+# 小代码段
+
+## 1.求反序数
 
 ```c++
 int reverse(int x)
@@ -190,7 +263,7 @@ int reverse(int x)
 }
 ```
 
-### 2.浮点数的比较运算
+## 2.浮点数的比较运算
 
 简单的浮点数运算一般不会出现误差，但是如果多次运算的比较复杂的浮点数可能会有误差
 
@@ -204,7 +277,7 @@ const double Pi=acos(-1.0);
 #define LessEqu(a,b) (((a)-(b))<(eps))
 ```
 
-### 3.闰年判断
+## 3.闰年判断
 
 ```c
 (i%4==0&&i%100!=0)||i%400==0
