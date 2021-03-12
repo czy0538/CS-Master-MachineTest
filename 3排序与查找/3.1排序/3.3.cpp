@@ -19,13 +19,13 @@ bool CmpAsc(const Stu &a, const Stu &b)
 {
     if (a.grade == b.grade)
         return a.order < b.order;
-    return a.grade > b.grade;
+    return a.grade < b.grade;
 }
 bool CmpDesc(const Stu &a, const Stu &b)
 {
     if (a.grade == b.grade)
         return a.order < b.order;
-    return a.grade < b.grade;
+    return a.grade > b.grade;
 }
 
 int main()
@@ -44,11 +44,11 @@ int main()
         }
         if (o)
         {
-            sort(stus.begin(), stus.end(), CmpDesc);
+            sort(stus.begin(), stus.end(), CmpAsc);
         }
         else
         {
-            sort(stus.begin(), stus.end(), CmpAsc);
+            sort(stus.begin(), stus.end(), CmpDesc);
         }
         for (Stu i : stus)
             i.print();
