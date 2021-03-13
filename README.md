@@ -283,3 +283,39 @@ const double Pi=acos(-1.0);
 (i%4==0&&i%100!=0)||i%400==0
 ```
 
+## 4.二分查找
+
+二分查找建立在被查找序列有序的基础上，该代码段以ASC为例，范围为[0,n-1]
+
+```c++
+//@arr 要查找的数组指针
+//@n 数组大小
+//@target 需要查找的目标元素
+//@mid 元素的位置
+//函数的返回值为是否查找成功
+bool binarySearch(int arr[],const int &n,const int &target,int &mid)
+{
+    int left=0;
+    int right=n-1;
+    while(left<=right)
+    {
+        //mid=(left+right)/2;//一般没问题
+        mid=left+(right-left)/2;//可以防止left、right都非常逼近范围时的溢出
+        if(arr[mid]<target)
+        {
+            left=mid+1;
+        }
+        else if(arr[mid]>target)
+        {
+            right=mid-1;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    return false;
+    
+}
+```
+
