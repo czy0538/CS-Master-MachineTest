@@ -252,7 +252,79 @@ template <class RandomAccessIterator, class Compare>
 
     
 
+## 9 stl数据结构
 
+## 9.1 map
+
+头文件：#include\<map\>;using namespace std;
+
+- map可以将任何基本类型（包括STL容器）映射到任何基本类型。
+- map会自动按照键值的asc（从小到大）排序，这是由于map内部通过红黑树实现。
+
+- map的定义
+
+  ```c++
+  map<typename1,typename2> name;
+  //注意typename不能为数组，如果需要数组可以考虑用vector或者用struct里套一个数组
+  struct Part
+  {
+      int part[2];
+  };
+  map<string,Part> name;
+  
+  typedef pair<int,int> p;
+  map<stirng,p> name;
+  ```
+
+- map的访问:可以通过下标或者迭代器访问
+
+  - 下标访问：
+
+    即通过key访问，key是唯一的；
+
+    如果map中没有key，则会新建一个key-value对；如果有，则会修改值；
+
+  - 通过迭代器访问：
+
+    map的迭代器仅支持$$ ++,--,!=,=,==$$运算符。
+
+    ```c++
+    //迭代器定义
+    map<typename1,typename2>:: iterator iter;
+    //元素值获取
+    iter->first;//key值获取
+    iter->second;//value值获取
+    
+    //遍历,注意不能用小于运算符
+    for(auto i=name.begin();i!=name.end();++i)
+    {
+        //do something
+    }
+    
+    name.begin()//返回第一个元素迭代器
+    name.end()//返回尾后迭代器
+    ```
+
+- find(key),若找到返回对应迭代器，没找到返回end()，时间复杂度o(logn)
+
+- count(key),若有返回1，没有返回0
+
+- size()获取键值对数
+
+- 插入函数
+
+  ```c++
+  // 插入单个键值对，并返回插入位置和成功标志，插入位置已经存在值时，插入失败
+  pair<iterator,bool> insert (const value_type& val);
+  
+  //在指定位置插入，在不同位置插入效率是不一样的，因为涉及到重排
+  iterator insert (const_iterator position, const value_type& val);
+  返回的pair first为迭代器，second为是否插入成功
+  ```
+
+  
+
+此外，c++还有unordered_map使用散列表实现，速度更快，但没有排序。
 
 # 小代码段
 
