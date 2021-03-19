@@ -254,7 +254,7 @@ template <class RandomAccessIterator, class Compare>
 
 ## 9 stl数据结构
 
-## 9.1 map
+### 9.1 map
 
 头文件：#include\<map\>;using namespace std;
 
@@ -325,6 +325,20 @@ template <class RandomAccessIterator, class Compare>
   
 
 此外，c++还有unordered_map使用散列表实现，速度更快，但没有排序。
+
+
+
+# 细节知识辨析
+
+## 1. cin,cin.get(),cin.getline(),getline辨析
+
+参考文献：
+
+https://www.cnblogs.com/cthon/p/9198686.html（https://archive.is/zhG72）
+
+https://blog.csdn.net/qq_33001647/article/details/54863824（https://archive.is/eRFL9）
+
+
 
 # 小代码段
 
@@ -435,3 +449,47 @@ int main()
 此外，把数组初始化在堆里每次使用memset赋值要比每次在栈里重新新建数组快。
 
 对数组名sizeof返回的是整个数组的byte数。
+
+## 6.浮点大数加减法
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+    string str1, str2;
+    int pos1, pos2;
+    int num1, num2;
+    while (cin >> str1 >> str2)
+    {
+        pos1 = str1.find('.', 0);
+        pos2 = str2.find('.', 0);
+        //.后的字符个数（不包括.)
+        num1 = str1.size() - pos1;
+        num2 = str2.size() - pos2;
+        if (pos1 < pos2)
+            str1.insert(0, pos2 - pos1, '0'); //前面补0
+        else
+            str2.insert(0, pos1 - pos2, '0');
+        if (num1 < num2)
+            str1.append(num2 - num1, '0'); //后面补0
+        else
+            str2.append(num1 - num2, '0');
+        int c = 0; //进位
+        for (int i = str1.size() - 1; i >= 0; i--)
+        {
+            if (str1[i] == '.')
+                i--;
+            int add = ((str1[i] - '0') + (str2[i] - '0') + c) % 10;
+            c = ((str1[i] - '0') + (str2[i] - '0') + c) / 10;
+            str1[i] = add + '0';
+        }
+        if (c != 0)
+            str1.insert(0, 1, '0' + c);
+        cout << str1 << endl;
+    }
+    return 0;
+}
+```
+
