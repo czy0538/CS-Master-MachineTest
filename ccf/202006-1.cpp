@@ -36,10 +36,12 @@ int main()
         for (int i = 0; i < m; ++i)
         {
             int x, y, z;
+            int p_a = a;
+            int p_b = b;
             scanf("%d %d %d", &z, &x, &y);
             bool t_a = (point_a[0].x * x + point_a[0].y * y + z < 0);
             bool t_b = (point_b[0].x * x + point_b[0].y * y + z > 0);
-            if (t_a == t_b)
+            if (t_a != t_b)
             {
                 printf("No\n");
                 continue;
@@ -47,9 +49,9 @@ int main()
             else
             {
                 bool flag = false;
-                while (a--)
+                while (p_a--)
                 {
-                    if (t_a != (point_a[a].x * x + point_a[a].y * y + z < 0))
+                    if (t_a != (point_a[p_a].x * x + point_a[p_a].y * y + z < 0))
                     {
                         flag = true;
                         break;
@@ -62,9 +64,9 @@ int main()
                 }
                 else
                 {
-                    while (b--)
+                    while (p_b--)
                     {
-                        if (t_b != (point_b[b].x * x + point_b[b].y * y + z < 0))
+                        if (t_b != (point_b[p_b].x * x + point_b[p_b].y * y + z > 0))
                         {
                             printf("No\n");
                             flag = true;
