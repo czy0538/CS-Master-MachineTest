@@ -328,6 +328,89 @@ template <class RandomAccessIterator, class Compare>
 
 
 
+### 9.2 string
+
+头文件 #include\<string\>
+
+- 输入
+
+  ```c++
+  string str;
+  cin>>str;//到空格终止
+  getline(cin,str);//读到'\n'终止
+  getline(cin,str,char);//读到char字符终止
+  //注意：不能用scanf进行输入
+  ```
+
+- 输出
+
+  ```c++
+  cout<<str;//输出字符串全部内容
+  //注意：不能直接用printf进行输出，而是要先进行转换
+  printf("%s",str.c_str());
+  ```
+
+- 定义字符串
+
+  ```c++
+  string str;//str为空串
+  string str="abc";//str为abc
+  string str(n,c);//创建一个有n个c的串
+  ```
+
+- 重载了+=和比较运算符，意思很显然
+
+- 访问方式
+
+  ```c++
+  str[1];//下标访问
+  //迭代器访问，注意迭代器没有＜运算符,可以修改元素但不能改变元素数量 
+  for(string:: iterator iter=str.begin();iter!=str.end();++iter)
+  {
+      cout<<*iter<<endl;
+  }
+  //遍历
+  for(const char &i:str)
+  {
+       cout<<i<<endl;
+  }
+  
+  for(char &i:str)
+  {
+       cout<<i<<endl;
+  }
+  ```
+
+- 常用函数
+
+  ```c++
+  string str='abcd';
+  str.size();//返回元素数量
+  string::nops;//find函数未匹配时候的返回值
+  //find函数查找子串str2，时间复杂度O(mn)，返回子串第一个字符位置
+  str.find(str2);
+  str.find(str2,pos);//从pos开始找
+  
+  str.substr(pos,len);//返回从pos开始，长度为len的子串
+  str.substr(pos,str.size()-pos);//返回从pos开始，到结尾的子串
+  str.substr(str1.find('x')+1,str.size()-str1.find('x')-1);//返回x后，到结尾的子串
+  
+  str.clear();//清空字符串
+  str="";//等效写法
+  str.erase();//等效写法
+  	
+  str.erase (size_t pos = 0, size_t len = npos);//从pos开始删除size_t个元素，第二个参数为空删除pos开始所有的元素
+  str.erase (const_iterator p);//删除迭代器指向的元素
+  str.erase (const_iterator first, const_iterator last);//删除[first,last)
+      
+  str.insert(pos,str2);//从pos开始插入str2
+  str.insert(it1,it2,it3);//从it1迭代器位置开始，插入[it2,it3)
+  ```
+
+  
+
+
+
 # 细节知识辨析
 
 ## 1. cin,cin.get(),cin.getline(),getline辨析
@@ -491,5 +574,77 @@ int main()
     }
     return 0;
 }
+```
+
+## 7.kmp算法
+
+```c++
+#include<iostream>
+#include<algorithm>
+#include<string>
+using namespace std;
+
+const int MAXN = 1000000;
+const int MAXM = 10000;
+
+int text[MAXN];
+int pattern[MAXM];
+int nextTable[MAXM];
+
+void GetNextTable(int m){		// 创建next表
+	int i = 0, j = -1;		
+	nextTable[0] = -1;
+	while (i < m) {			//因为找前后缀的匹配,所以让j=-1,使得第一个模式串从i=1开始
+		if(j == -1 || pattern[i] == pattern[j]){	
+			i++;
+			j++;
+			nextTable[i] = j;
+		}else {
+			j = nextTable[j];
+		}
+	}
+}
+
+int KMP(int n, int m){
+	GetNextTable(m);
+	int i = 0, j = 0;
+	while(i < n && j < m){			// n是目标字符串，m是模式串
+		if(j == -1 || text[i] == pattern[j]){	//匹配成功, 
+			i++;					//或者是j==-1, 首部匹配失败，直接文本串向后移动一位
+			j++;
+		}else{						//匹配失败, 根据next数组移动模式串的j, 保持文本串的i不回溯, 
+			j = nextTable[j];	
+		}
+	}
+	if(j == m){				//移动到边界，匹配成功
+		return i - j + 1;
+        // j=nextTable[j];	//找出所有的匹配穿情况
+	}else {
+		return -1;
+	}
+}
+
+int main(){
+	int caseNumber;
+	cin>>caseNumber;
+	while(caseNumber--){
+		int n, m;
+		cin>>n>>m;
+		for(int i=0;i<n;i++){
+			cin>>text[i];
+		}
+		for(int j=0;j<m;j++){
+			cin>>pattern[j];
+		}
+		cout<<KMP(n, m)<<endl;
+	}
+	return 0;
+}
+
+/*KMP理解
+https://blog.csdn.net/v_JULY_v/article/details/7041827
+https://www.zhihu.com/question/21923021
+*/
+
 ```
 
