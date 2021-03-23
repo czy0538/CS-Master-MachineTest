@@ -47,6 +47,8 @@
 
 除了string类型以外，尽量使用printf和scanf，因为速度会更快，他们在头文件#include<cstdio>中
 
+- string 和 特别大的数的输入输出可以考虑cin cout
+
 ### 3.1 scanf
 
 ![image-20210218163024672](https://i.loli.net/2021/02/18/TsAPtrpx5izfjDe.png)
