@@ -4,7 +4,7 @@
 
 ## 1. 数据类型
 
-- 10^9^ (32bits,2147483648)以内的数据用int,10^18^(64位)以内用long long，注意如果直接赋值long long数且大小超过了int范围，需要在立即数后面加ll。
+- **10^9^ (32bits,2147483648)以内的数据用int,10^18^(64位)以内用long long**，注意如果直接赋值long long数且大小超过了int范围，需要在立即数后面加ll。
 
 - float有效精读只有6-7位，double有效精度有15-16位。**对于浮点数，尽量全部用double来存储。**浮点数常量默认为double的。
 
@@ -423,7 +423,30 @@ https://www.cnblogs.com/cthon/p/9198686.html（https://archive.is/zhG72）
 
 https://blog.csdn.net/qq_33001647/article/details/54863824（https://archive.is/eRFL9）
 
+## 2.size_t作为数组下标倒序输出数组时的问题
 
+```c++
+ for (size_t i = binary.size() - 1; i >=0; --i)
+ {
+     //do something
+ }
+```
+
+size_t是无符号类型，故其>=0是恒成立的，这里如果想输出0号元素且能判断结束，需要注意在等于0以后，0-1会产生溢出，得到最大数，故应改成：
+
+```c++
+ for (size_t i = binary.size() - 1; i ！=-1或者i<-1; --i)
+ {
+     //do something
+ }
+```
+
+## 3.运算符重载
+
+- 如果作为类的成员函数，双目运算符也只需要写出第二个操作数
+- 作为类的成员函数，类本身为第一个操作数
+- 如果作为类的友元函数（非类的成员函数）进行重载，则所有操作数都要写出
+- 输入输出运算法必须重载为友元函数
 
 # 小代码段
 
@@ -648,5 +671,45 @@ https://blog.csdn.net/v_JULY_v/article/details/7041827
 https://www.zhihu.com/question/21923021
 */
 
+```
+
+## 8.十进制转二进制（高转低）
+
+核心思想即不断的取余，右移，最终得到从低位到高位的该进制数；
+
+如果是转为其他进制（高转低）也采用同样方法。
+
+**该方法针对无符号数**
+
+```c++
+#include <iostream>
+#include <cstdio>
+#include <stack>
+using namespace std;
+stack<int> d2b(unsigned int x)
+{
+    stack<int> binary;//使用栈进行顺序的反转
+    while (x)
+    {
+        binary.push(x % 2);
+        x >>= 1;
+    }
+    return binary;
+}
+int main()
+{
+    int n;
+    while (scanf("%d", &n) != EOF)
+    {
+        stack<int> binary = d2b(n);
+        while(!binary.empty())
+        {
+            printf("%d", binary.top());
+            binary.pop();
+        }
+        printf("\n");
+    }
+    return 0;
+}
 ```
 
