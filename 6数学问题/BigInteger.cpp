@@ -19,7 +19,7 @@ public:
     //构造函数
     BigInteger();                    //初始化
     BigInteger(int x);               //整数转为高精度整数
-    BigInteger(string str);   //字符串转为高精度整数
+    BigInteger(string str);          //字符串转为高精度整数
     BigInteger(const BigInteger &b); //高精度整数之间的赋值
 
     //高精度数据之间的运算,采用重载方式进行
@@ -32,9 +32,11 @@ public:
     //比较运算符
     bool operator<=(const BigInteger &b); //小于等于
     bool operator==(const BigInteger &b); //等于
+    bool operator>(const BigInteger &b);  //大于
 
     //赋值运算符
-    BigInteger operator=(int x);
+    BigInteger
+    operator=(int x);
     BigInteger operator=(string str);
     BigInteger operator=(const BigInteger &b);
 
@@ -48,14 +50,14 @@ istream &operator>>(istream &in, BigInteger &x)
 {
     string str;
     in >> str;
-    x = str;//依赖对=的重载
+    x = str; //依赖对=的重载
     return in;
 }
 
-ostream &operator<<(ostream& out,const BigInteger &x)
+ostream &operator<<(ostream &out, const BigInteger &x)
 {
     //注意先输出高位的数
-    for (size_t i = x.length - 1; i != -1;--i)
+    for (size_t i = x.length - 1; i != -1; --i)
     {
         out << x.digit[i];
     }
@@ -143,24 +145,62 @@ BigInteger BigInteger::operator+(const BigInteger &b)
     BigInteger ans;
     int carry = 0;
     //大小为两个之间最大的
-    for (size_t i = 0; i < length || i < b.length;++i)
+    for (size_t i = 0; i < length || i < b.length; ++i)
     {
         int current = digit[i] + b.digit[i] + carry;
-        carry = current / 10;//如果有进位carry=1，否则为0
-        ans.digit[ans.length++] = current % 10;//赋值同时改写length
+        carry = current / 10;                   //如果有进位carry=1，否则为0
+        ans.digit[ans.length++] = current % 10; //赋值同时改写length
     }
     //处理最后的进位
-    if (carry!=0)
+    if (carry != 0)
     {
         ans.digit[ans.length++] = carry;
     }
     return ans;
 }
+
+// BigInteger BigInteger::operator-(const BigInteger &y)
+// {
+    
+//     BigInteger x;
+// }
+
+bool BigInteger::operator>(const BigInteger &b)
+{
+    if (length > b.length)
+    {
+        return true;
+    }
+    else if (length < b.length)
+    {
+        return false;
+    }
+    else
+    {
+        //大于从高位开始比较
+        for (size_t i = 0; i < length; ++i)
+        {
+            if (digit[i] == b.digit[i])
+                continue;
+            else
+                return digit[i] > b.digit[i];
+        }
+    }
+    return false;
+}
+
 int main()
 {
-    BigInteger x;
-    cin >> x;
-    auto y = BigInteger("100000000000000000000000000097");
-    cout << x+y;
+    while(true)
+    {
+        BigInteger x, y;
+        cin >> x >> y;
+        if (x > y)
+        {
+            cout << ">" << endl;
+        }
+        else
+            cout << "?????" << endl;
+    }
     return 0;
 }
