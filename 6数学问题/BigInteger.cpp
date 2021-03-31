@@ -19,7 +19,7 @@ public:
     //构造函数
     BigInteger();                    //初始化
     BigInteger(int x);               //整数转为高精度整数
-    BigInteger(const string &str);   //字符串转为高精度整数
+    BigInteger(string str);   //字符串转为高精度整数
     BigInteger(const BigInteger &b); //高精度整数之间的赋值
 
     //高精度数据之间的运算,采用重载方式进行
@@ -81,14 +81,14 @@ BigInteger::BigInteger(int x)
     }
 }
 
-BigInteger::BigInteger(const string &str)
+BigInteger::BigInteger(string str)
 {
     memset(digit, 0, sizeof(digit));
     length = str.size();
     //将字符串转为数组，注意字符串中0位为最高位
     for (size_t i = 0; i < length; ++i)
     {
-        digit[i] == str[length - i - 1] - '0';
+        digit[i] = str[length - i - 1] - '0';
     }
 }
 
@@ -135,13 +135,32 @@ BigInteger BigInteger::operator=(const BigInteger &b)
     {
         digit[i] = b.digit[i];
     }
-    return 0;
+    return *this;
 }
 
+BigInteger BigInteger::operator+(const BigInteger &b)
+{
+    BigInteger ans;
+    int carry = 0;
+    //大小为两个之间最大的
+    for (size_t i = 0; i < length || i < b.length;++i)
+    {
+        int current = digit[i] + b.digit[i] + carry;
+        carry = current / 10;//如果有进位carry=1，否则为0
+        ans.digit[ans.length++] = current % 10;//赋值同时改写length
+    }
+    //处理最后的进位
+    if (carry!=0)
+    {
+        ans.digit[ans.length++] = carry;
+    }
+    return ans;
+}
 int main()
 {
     BigInteger x;
     cin >> x;
-    cout << x;
+    auto y = BigInteger("100000000000000000000000000097");
+    cout << x+y;
     return 0;
 }
