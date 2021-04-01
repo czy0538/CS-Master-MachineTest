@@ -159,13 +159,110 @@ BigInteger BigInteger::operator+(const BigInteger &b)
     return ans;
 }
 
-// BigInteger BigInteger::operator-(const BigInteger &y)
-// {
-    
-//     BigInteger x;
-// }
+BigInteger BigInteger::operator-(const BigInteger &b)
+{
+    BigInteger ans;
+    int carry = 0;
+    //默认a>b,故只要满足a的长度即可。
+    for (size_t i = 0; i < length; ++i)
+    {
+        int current = digit[i] - b.digit[i] - carry;
+        if (current < 0)
+        {
+            carry = 1;
+            current += 10;
+        }
+        ans.digit[ans.length++] = current;
+    }
+    //处理开头的0，注意条件顺序不可颠倒
+    while (ans.length > 1 && ans.digit[ans.length - 1] == 0)
+    {
+        ans.length--;
+    }
+    return ans;
+}
 
-bool BigInteger::operator>(const BigInteger &b)
+BigInteger BigInteger::operator*(const BigInteger &b)
+{
+    BigInteger ans;
+    ans.length = length + b.length; //length初始化为两个的和,而a*b的长度不会超过两数长度的和
+    //逐位乘
+    for (size_t i = 0; i < length; ++i)
+    {
+        for (size_t j = 0; j < b.length; ++j)
+        {
+            ans.digit[i + j] += digit[i] * b.digit[j]; //乘的结果加
+        }
+    }
+    //逐位处理进位
+    for (size_t i = 0; i < ans.length; ++i)
+    {
+        ans.digit[i + 1] += ans.digit[i] / 10; //进位
+        ans.digit[i] %= 10;
+    }
+    while (ans.length > 1 && ans.digit[ans.length - 1] == 0)
+    {
+        ans.length--;
+    }
+    return ans;
+}
+
+BigInteger BigInteger::operator/(const BigInteger &b)
+{
+    BigInteger ans;
+    ans.length = length;
+    BigInteger remainder = 0;//余数
+    BigInteger temp = b;
+    for (size_t i = length - 1; i != -1;--i)
+    {
+        if(!(remainder.length==1&&remainder.digit[0]==0))
+        {
+            for (size_t j = remainder.length - 1; j!=-1;--j)
+            {
+                remainder.digit[j + 1] == remainder.digit[j];
+            }
+            remainder.length++;
+        }
+        remainder.digit[0] = digit[i];
+        while(temp<=remainder)
+        {
+            remainder = remainder - temp;
+            ans.digit[i]++;
+        }
+    }
+    while (ans.length > 1 && ans.digit[ans.length - 1] == 0)
+    {
+        ans.length--;
+    }
+    return ans;
+}
+
+//与除法基本一致，只不过返回值为余数，而且不用计算ans
+BigInteger BigInteger::operator%(const BigInteger &b)
+{
+    BigInteger remainder = 0;//余数
+    BigInteger temp = b;
+    for (size_t i = length - 1; i != -1;--i)
+    {
+        if (!(remainder.length == 1 && remainder.digit[0] == 0))
+        {
+            for (size_t j = remainder.length - 1; j != -1; --j)
+            {
+                remainder.digit[j + 1] == remainder.digit[j];
+            }
+            remainder.length++;
+        }
+        remainder.digit[0] = digit[i];
+        while (temp <= remainder)
+        {
+            remainder = remainder - temp;\
+            //这里没有了ans
+        }
+    }
+    return remainder;
+}
+
+    bool BigInteger::operator>(const BigInteger &b)
 {
     if (length > b.length)
     {
@@ -189,18 +286,38 @@ bool BigInteger::operator>(const BigInteger &b)
     return false;
 }
 
+bool BigInteger::operator<=(const BigInteger &b)
+{
+    if (length < b.length)
+    {
+        return true;
+    }
+    else if (length > b.length)
+    {
+        return false;
+    }
+    else
+    {
+        for (size_t i = length - 1; i != -1; --i)
+        {
+            if (digit[i] == b.digit[i])
+                continue;
+            else
+                return (digit[i] < b.digit[i]);
+        }
+    }
+    return true;
+}
+
 int main()
 {
-    while(true)
+
+    BigInteger a;
+    BigInteger b;
+    while (cin >> a >> b)
     {
-        BigInteger x, y;
-        cin >> x >> y;
-        if (x > y)
-        {
-            cout << ">" << endl;
-        }
-        else
-            cout << "?????" << endl;
+        auto c = a * b;
+        cout << c.length << " " << c << endl;
     }
     return 0;
 }
