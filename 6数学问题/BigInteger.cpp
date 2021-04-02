@@ -13,7 +13,7 @@ public:
     //存放数据的数组
     int digit[MAXN];
     //数字的长度
-    int length;
+    size_t length;
 
 public:
     //构造函数
@@ -33,10 +33,10 @@ public:
     bool operator<=(const BigInteger &b); //小于等于
     bool operator==(const BigInteger &b); //等于
     bool operator>(const BigInteger &b);  //大于
+    bool operator!=(const BigInteger &b); //不等于
 
     //赋值运算符
-    BigInteger
-    operator=(int x);
+    BigInteger operator=(int x);
     BigInteger operator=(string str);
     BigInteger operator=(const BigInteger &b);
 
@@ -211,20 +211,20 @@ BigInteger BigInteger::operator/(const BigInteger &b)
 {
     BigInteger ans;
     ans.length = length;
-    BigInteger remainder = 0;//余数
+    BigInteger remainder = 0; //余数
     BigInteger temp = b;
-    for (size_t i = length - 1; i != -1;--i)
+    for (size_t i = length - 1; i != -1; --i)
     {
-        if(!(remainder.length==1&&remainder.digit[0]==0))
+        if (!(remainder.length == 1 && remainder.digit[0] == 0))
         {
-            for (size_t j = remainder.length - 1; j!=-1;--j)
+            for (size_t j = remainder.length - 1; j != -1; --j)
             {
                 remainder.digit[j + 1] == remainder.digit[j];
             }
             remainder.length++;
         }
         remainder.digit[0] = digit[i];
-        while(temp<=remainder)
+        while (temp <= remainder)
         {
             remainder = remainder - temp;
             ans.digit[i]++;
@@ -240,9 +240,9 @@ BigInteger BigInteger::operator/(const BigInteger &b)
 //与除法基本一致，只不过返回值为余数，而且不用计算ans
 BigInteger BigInteger::operator%(const BigInteger &b)
 {
-    BigInteger remainder = 0;//余数
+    BigInteger remainder = 0; //余数
     BigInteger temp = b;
-    for (size_t i = length - 1; i != -1;--i)
+    for (size_t i = length - 1; i != -1; --i)
     {
         if (!(remainder.length == 1 && remainder.digit[0] == 0))
         {
@@ -255,14 +255,26 @@ BigInteger BigInteger::operator%(const BigInteger &b)
         remainder.digit[0] = digit[i];
         while (temp <= remainder)
         {
-            remainder = remainder - temp;\
-            //这里没有了ans
+            remainder = remainder - temp; //这里没有了ans
         }
     }
     return remainder;
 }
 
-    bool BigInteger::operator>(const BigInteger &b)
+bool BigInteger::operator!=(const BigInteger &b)
+{
+    if (length != b.length)
+        return true;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        if (digit[i] != b.digit[i])
+            return true;
+    }
+    return false;
+}
+
+bool BigInteger::operator>(const BigInteger &b)
 {
     if (length > b.length)
     {

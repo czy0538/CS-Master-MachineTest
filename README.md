@@ -394,7 +394,7 @@ template <class RandomAccessIterator, class Compare>
   str.find(str2,pos);//从pos开始找
   
   str.substr(pos,len);//返回从pos开始，长度为len的子串
-  str.substr(pos,str.size()-pos);//返回从pos开始，到结尾的子串
+  str.substr(pos);//返回从pos开始，到结尾的子串
   str.substr(str1.find('x')+1,str.size()-str1.find('x')-1);//返回x后，到结尾的子串
   
   str.clear();//清空字符串
@@ -710,6 +710,54 @@ int main()
         printf("\n");
     }
     return 0;
+}
+```
+
+## 9. 大数*int
+
+### 除法
+
+```c++
+string Divide(string str, int x)
+{
+    int reminder = 0;
+    //注意这是从高向低算的
+    for (int i = 0; i < str.size(); ++i)
+    {
+        int current = reminder * 10 + str[i] - '0';
+        str[i] = current / x + '0';
+        reminder = current % x;
+    }
+
+    //找到首个非零下标
+    int pos = 0;
+    while (str[pos] == '0')
+    {
+        ++pos;
+    }
+
+    return str.substr(pos);
+}
+```
+
+### 取余
+
+```c++
+string Mod(string str, int x)
+{
+    int reminder = 0;
+    //注意这是从高向低算的
+    for (int i = 0; i < str.size(); ++i)
+    {
+        int current = reminder * 10 + str[i] - '0';
+        str[i] = current / x + '0';
+        reminder = current % x;
+    }
+    //int2str
+    stringstream ss;
+    ss<<reminder;
+    ss>>str;
+    return str;
 }
 ```
 
