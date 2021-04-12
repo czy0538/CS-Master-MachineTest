@@ -3,6 +3,7 @@
         "iosfwd": "cpp",
         "string_view": "cpp",
         "*.tcc": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "iostream": "cpp"
     }
 }

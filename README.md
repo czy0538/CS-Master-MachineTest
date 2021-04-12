@@ -765,6 +765,50 @@ string Mod(string str, int x)
 
 ###  乘法
 
+```c++
+string mulitiple(string str, int x)
+{
+    int carry = 0;
+    for (int i = str.size() - 1; i >= 0; --i)
+    {
+        int current = carry + (str[i] - '0') * x;
+        carry = current / 10;
+        str[i] = current % 10 + '0';
+    }
+    while (carry != 0)
+    {
+        char c = carry % 10 + '0';
+        carry /= 10;
+        str = string(1, c) + str;
+    }
+    return str;
+}
+```
+
+### 加法
+
+```c++
+string add(string str, int x)
+{
+    int carry = x;
+    for (int i = str.size() - 1; i >= 0 && carry != 0; --i) //没有进位了也就可以停了
+    {
+        int current = carry + str[i] - '0';
+        str[i] = current % 10 + '0';
+        carry /= 10;
+    }
+    while (carry != 0)
+    {
+        char c = carry % 10 + '0';
+        carry /= 10;
+        str = string(1, c) + str;
+    }
+    return str;
+}
+```
+
+
+
 ## 10.四舍五入保留小数点后n位
 
 ```c++
