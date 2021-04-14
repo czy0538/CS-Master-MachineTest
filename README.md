@@ -834,5 +834,5 @@ int main()
 | 题目类型 | 索引                  |
 | -------- | --------------------- |
 | 贪心算法 | [习题7.1](http://t.cn/E9emuS9) |
-|          |                       |
+| 贪心算法 | [习题7.2](https://www.nowcoder.com/questionTerminal/f7eba38f7cd24c45982831e0f38518f9) |
 
