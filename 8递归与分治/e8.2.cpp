@@ -1,3 +1,17 @@
+/*
+采用交换法，足以处理所有的全排列问题
+如果最后没有要求按照某种顺序的话，直接输出即可
+该题也可以直接用c++的算法库里的好东西
+string s;
+while (getline(cin, s)) {
+    sort(s.begin(), s.end());
+    do
+    {
+        cout << s << endl;
+    } while (next_permutation(s.begin(), s.end()));
+    cout << endl;
+}
+*/
 #include <string>
 #include <unordered_set>
 #include <set>
