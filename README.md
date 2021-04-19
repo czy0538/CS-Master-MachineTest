@@ -450,6 +450,128 @@ size_t是无符号类型，故其>=0是恒成立的，这里如果想输出0号�
 - 如果作为类的友元函数（非类的成员函数）进行重载，则所有操作数都要写出
 - 输入输出运算法必须重载为友元函数
 
+
+
+# 数据结构
+
+## 二叉树
+
+### 二叉树的链式结构
+
+```c++
+struct BinaryTreeNode
+{
+    ElementType data; //数据
+    BinaryTreeNode *lchild, *rchild;
+    BinaryTreeNode(ElementType c) : data(c), lchild(nullptr), rchild(nullptr){}
+};
+```
+
+### 二叉树的遍历
+
+这几种遍历方法都是从左子树到右子树，所谓的前中后序针对的是根节点的位置
+
+```c++
+//PreOrder
+void PreOrder(BinaryTreeNode *&node)
+{
+    if (node == nullptr)
+        return;
+    visit(node);
+    PreOrder(node->lchild);
+    PreOrder(node->rchild);
+}
+
+//InOrder
+void InOrder(BinaryTreeNode *&node)
+{
+    if (node == nullptr)
+        return;
+    InOrder(node->lchild);
+    visit(node);
+    InOrder(node->rchild);
+}
+
+//PostOrder
+BinaryTreeNode *PostOrder(BinaryTreeNode *&node)
+{
+    if (node == nullptr)
+        return;
+    PostOrder(node->lchild);
+    PostOrder(node->rchild);
+    visit(node);
+}
+
+//LevelOrder,必须借助队列实现
+void LevelOrder(BinaryTreeNode *&node)
+{
+    BinaryTreeNode *t;
+    queue<BinaryTreeNode *> q;
+    if (node = nullptr)
+        return;
+    q.push(node);
+    while (!q.empty())
+    {
+        t = q.front();
+        q.pop();
+        visit(t);
+        if (t->lchild != nullptr)
+            q.push(t->lchild);
+        if (t->rchild != nullptr)
+            q.push(t->rchild);
+    }
+}
+
+```
+
+### 树的创建
+
+给定先序和中序、后序和中序、层序和中序都可以唯一的确定一棵二叉树。
+
+给定后续、先序且书为满二叉树，也可以确定。
+
+其他情况不唯一
+
+#### 由先序序列创建树
+
+只给定一种序列，并不能唯一的创建树
+
+```c++
+void creatTreePreOrder(BinaryTreeNode *&node, const string &str, int &pos)
+{
+    char c = str[pos++];
+
+    if (c == '#') //空树
+    {
+        node = nullptr;
+        return;
+    }
+    node = new BinaryTreeNode(c);
+    creatTreePreOrder(node->lchild, str, pos);
+    creatTreePreOrder(node->rchild, str, pos);
+}
+```
+
+
+
+### 由先序和中序序列创建树
+
+```c++
+BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
+{
+    if(pre.size()==0)
+        return nullptr;
+    char c = pre[0];
+    int pos = in.find(c);
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->lchild = creatTreePre_InOrade(pre.substr(1, pos), in.substr(0, pos));
+    root->rchild = creatTreePre_InOrade(pre.substr(pos + 1), in.substr(pos + 1));
+    return root;
+}
+```
+
+先序遍历的第一个元素为根节点，依照此可以结合中序遍历，分为左右序列。中序遍历主要提供的是pos，也就是元素个数。
+
 # 小代码段
 
 ## 1.求反序数

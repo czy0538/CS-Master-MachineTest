@@ -1,19 +1,20 @@
 #include <iostream>
-#include<queue>
-#include<string>
+#include <queue>
+#include <string>
 using namespace std;
 
 using ElementType = char; //定义数据类型
 
 //节点
-typedef struct BinaryTreeNode
+struct BinaryTreeNode
 {
     ElementType data; //数据
     BinaryTreeNode *lchild, *rchild;
-} * BiTNode;
+    BinaryTreeNode(ElementType c) : data(c), lchild(nullptr), rchild(nullptr){}
+};
 
 //节点访问函数
-ElementType visit(BiTNode &node)
+ElementType visit(BinaryTreeNode *&node)
 {
     if (node != nullptr)
     {
@@ -23,7 +24,7 @@ ElementType visit(BiTNode &node)
 }
 
 //PreOrder
-void PreOrder(BiTNode &node)
+void PreOrder(BinaryTreeNode *&node)
 {
     if (node == nullptr)
         return;
@@ -33,7 +34,7 @@ void PreOrder(BiTNode &node)
 }
 
 //InOrder
-void InOrder(BiTNode &node)
+void InOrder(BinaryTreeNode *&node)
 {
     if (node == nullptr)
         return;
@@ -43,7 +44,7 @@ void InOrder(BiTNode &node)
 }
 
 //PostOrder
-BiTNode PostOrder(BiTNode &node)
+BinaryTreeNode *PostOrder(BinaryTreeNode *&node)
 {
     if (node == nullptr)
         return;
@@ -53,14 +54,14 @@ BiTNode PostOrder(BiTNode &node)
 }
 
 //LevelOrder
-void LevelOrder(BiTNode &node)
+void LevelOrder(BinaryTreeNode *&node)
 {
-    BiTNode t;
-    queue<BiTNode> q;
-    if(node=nullptr)
+    BinaryTreeNode *t;
+    queue<BinaryTreeNode *> q;
+    if (node = nullptr)
         return;
     q.push(node);
-    while(!q.empty())
+    while (!q.empty())
     {
         t = q.front();
         q.pop();
@@ -72,18 +73,30 @@ void LevelOrder(BiTNode &node)
     }
 }
 
-//creatTreePreOrder
-void creatTreePreOrder(BiTNode &node,const string &str,int &pos)
+//creatTreePreOrder,不唯一
+void creatTreePreOrder(BinaryTreeNode *&node, const string &str, int &pos)
 {
-
+    char c = str[pos++];
     //空树
-    if(str[pos]=='#')
+    if (c == '#')
     {
         node = nullptr;
         return;
     }
-    node = new BinaryTreeNode;
-    node->data = str[pos++];
+    node = new BinaryTreeNode(c);
     creatTreePreOrder(node->lchild, str, pos);
     creatTreePreOrder(node->rchild, str, pos);
+}
+
+//根据先序和中序确定子树
+BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
+{
+    if(pre.size()==0)
+        return nullptr;
+    char c = pre[0];
+    int pos = in.find(c);
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->lchild = creatTreePre_InOrade(pre.substr(1, pos), in.substr(0, pos));
+    root->rchild = creatTreePre_InOrade(pre.substr(pos + 1), in.substr(pos + 1));
+    return root;
 }
