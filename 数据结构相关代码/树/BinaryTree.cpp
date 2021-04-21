@@ -10,17 +10,16 @@ struct BinaryTreeNode
 {
     ElementType data; //数据
     BinaryTreeNode *lchild, *rchild;
-    BinaryTreeNode(ElementType c) : data(c), lchild(nullptr), rchild(nullptr){}
+    BinaryTreeNode(ElementType c) : data(c), lchild(nullptr), rchild(nullptr) {}
 };
 
 //节点访问函数
-ElementType visit(BinaryTreeNode *&node)
+void visit(BinaryTreeNode *&node)
 {
     if (node != nullptr)
     {
-        return node->data;
+        cout << node->data;
     }
-    return 0;
 }
 
 //PreOrder
@@ -44,7 +43,7 @@ void InOrder(BinaryTreeNode *&node)
 }
 
 //PostOrder
-BinaryTreeNode *PostOrder(BinaryTreeNode *&node)
+void PostOrder(BinaryTreeNode *&node)
 {
     if (node == nullptr)
         return;
@@ -58,7 +57,7 @@ void LevelOrder(BinaryTreeNode *&node)
 {
     BinaryTreeNode *t;
     queue<BinaryTreeNode *> q;
-    if (node = nullptr)
+    if (node == nullptr)
         return;
     q.push(node);
     while (!q.empty())
@@ -89,9 +88,9 @@ void creatTreePreOrder(BinaryTreeNode *&node, const string &str, int &pos)
 }
 
 //根据先序和中序确定子树
-BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
+BinaryTreeNode *creatTreePre_InOrade(string pre, string in)
 {
-    if(pre.size()==0)
+    if (pre.size() == 0)
         return nullptr;
     char c = pre[0];
     int pos = in.find(c);
@@ -99,4 +98,28 @@ BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
     root->lchild = creatTreePre_InOrade(pre.substr(1, pos), in.substr(0, pos));
     root->rchild = creatTreePre_InOrade(pre.substr(pos + 1), in.substr(pos + 1));
     return root;
+}
+
+//根据后序和中序确定子树
+
+BinaryTreeNode *creatTreePost_InOrade(string post, string in)
+{
+    if (post.size() == 0)
+        return nullptr;
+    char c = post[post.size() - 1];
+    int pos = in.find(c);
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->rchild = creatTreePost_InOrade(post.substr(pos, post.size() - pos - 1), in.substr(pos + 1));
+    root->lchild = creatTreePost_InOrade(post.substr(0, pos), in.substr(0, pos));
+    return root;
+}
+
+int main()
+{
+    string pre = "abdec";
+    string post = "debca";
+    string in = "dbeac";
+    BinaryTreeNode *root = creatTreePost_InOrade(post, in);
+    LevelOrder(root);
+    return 0;
 }
