@@ -493,7 +493,7 @@ void InOrder(BinaryTreeNode *&node)
 }
 
 //PostOrder
-BinaryTreeNode *PostOrder(BinaryTreeNode *&node)
+void *PostOrder(BinaryTreeNode *&node)
 {
     if (node == nullptr)
         return;
@@ -507,7 +507,7 @@ void LevelOrder(BinaryTreeNode *&node)
 {
     BinaryTreeNode *t;
     queue<BinaryTreeNode *> q;
-    if (node = nullptr)
+    if (node == nullptr)
         return;
     q.push(node);
     while (!q.empty())
@@ -554,7 +554,7 @@ void creatTreePreOrder(BinaryTreeNode *&node, const string &str, int &pos)
 
 
 
-### 由先序和中序序列创建树
+#### 由先序和中序序列创建树
 
 ```c++
 BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
@@ -571,6 +571,54 @@ BinaryTreeNode* creatTreePre_InOrade(string pre,string in)
 ```
 
 先序遍历的第一个元素为根节点，依照此可以结合中序遍历，分为左右序列。中序遍历主要提供的是pos，也就是元素个数。
+
+
+
+#### 由后序和中序创建二叉树
+
+```c++
+BinaryTreeNode *creatTreePost_InOrade(string post, string in)
+{
+    if (post.size() == 0)
+        return nullptr;
+    char c = post[post.size() - 1];
+    int pos = in.find(c);
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->rchild = creatTreePost_InOrade(post.substr(pos, post.size() - pos - 1), in.substr(pos + 1));
+    root->lchild = creatTreePost_InOrade(post.substr(0, pos), in.substr(0, pos));
+    return root;
+}
+```
+
+
+
+#### 由中序和层序创建二叉树
+
+```c++
+BinaryTreeNode *creatTreeLeval_InOrade(string leval, string in)
+{
+    if (in.size() == 0)
+        return nullptr;
+    int pos = 0;
+    int i = 0;
+    char c;
+    for (; i < leval.size(); ++i)
+    {
+        pos = in.find(leval[i]);
+        if (pos != string::npos)
+        {
+            c = in[pos];
+            break;
+        }
+    }
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->lchild = creatTreeLeval_InOrade(leval.substr(i + 1), in.substr(0, pos));
+    root->rchild = creatTreeLeval_InOrade(leval.substr(i + 1), in.substr(pos + 1));
+    return root;
+}
+```
+
+
 
 # 小代码段
 

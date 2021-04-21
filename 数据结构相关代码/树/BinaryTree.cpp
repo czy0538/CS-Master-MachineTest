@@ -101,7 +101,6 @@ BinaryTreeNode *creatTreePre_InOrade(string pre, string in)
 }
 
 //根据后序和中序确定子树
-
 BinaryTreeNode *creatTreePost_InOrade(string post, string in)
 {
     if (post.size() == 0)
@@ -114,12 +113,36 @@ BinaryTreeNode *creatTreePost_InOrade(string post, string in)
     return root;
 }
 
+//根据中序和层序确定子树
+BinaryTreeNode *creatTreeLeval_InOrade(string leval, string in)
+{
+    if (in.size() == 0)
+        return nullptr;
+    int pos = 0;
+    int i = 0;
+    char c;
+    for (; i < leval.size(); ++i)
+    {
+        pos = in.find(leval[i]);
+        if (pos != string::npos)
+        {
+            c = in[pos];
+            break;
+        }
+    }
+    BinaryTreeNode *root = new BinaryTreeNode(c);
+    root->lchild = creatTreeLeval_InOrade(leval.substr(i + 1), in.substr(0, pos));
+    root->rchild = creatTreeLeval_InOrade(leval.substr(i + 1), in.substr(pos + 1));
+    return root;
+}
+
 int main()
 {
     string pre = "abdec";
     string post = "debca";
     string in = "dbeac";
-    BinaryTreeNode *root = creatTreePost_InOrade(post, in);
-    LevelOrder(root);
+    string leval = "abcde";
+    BinaryTreeNode *root = creatTreeLeval_InOrade(leval, in);
+    PostOrder(root);
     return 0;
 }
