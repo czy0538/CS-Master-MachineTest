@@ -254,7 +254,7 @@ template <class RandomAccessIterator, class Compare>
     sort (myvector.begin(), myvector.end(), myobject);
     ```
 
-    
+    在对数组排序时，假设数组名为q，sort(q,q+n)即可，**q+n为q[n]的地址**！q+1会自动移动一个元素而不是单纯的移动地址。
 
 ## 9 stl数据结构
 
